@@ -9,15 +9,23 @@ int max_recursion_level = 3;
 int segment_lenght = 10;
 
 // base axioma
-char* base_axioma = "X";
+char* base_axioma;
 // list of rules 
-char* rules[] = {"-YF+XFX+FY-", "+XF-YFY-FX+"};
-int rule_number = 2;
+char** rules;
+int rule_number = 0;
 // list of symbols that are substituted by the rules in the same position in their array
-char substituition_symbols[] = {'X', 'Y'};
+char* substituition_symbols;
 // list of symbols that are removed at the end of the recursion
-char removal_symbols[] = {'X', 'Y'};
-int removal_symbol_number = 2;
+char* removal_symbols;
+int removal_symbol_number = 0;
+
+
+// power function for integers (to avoid floating point from math.h::pow)
+int int_power(int base, int exp){
+    int result = 1;
+    for(int i=0; i<exp; i++) result*=base;
+    return result;
+}
 
 
 // inserts "target" string into "origin" at the specified position
@@ -54,10 +62,21 @@ void remove_characthers(char target_characther, char* origin){
 }
 
 
+// approximates an upper limit to "fractal" string lenght
+int generate_fractal_lenght(){
+    int biggest_characther_count = 0;
+    biggest_characther_count = strlen(rules[0]);
+    for(int i=1; i<rule_number; i++){
+        if(biggest_characther_count<strlen(rules[i])) biggest_characther_count = strlen(rules[i]);
+    }
+    if(biggest_characther_count<strlen(base_axioma)) biggest_characther_count = strlen(base_axioma);
+    return int_power(biggest_characther_count, max_recursion_level);
+}
+
 // creates a fractal string
 char* generate_fractal_string(){
     // initialazing fractal string
-    char* fractal = malloc(1000);
+    char* fractal = malloc(generate_fractal_lenght());
     fractal[0] = '\0';
     insert(base_axioma, fractal, 0);
     printf("FRACTAL INITIALIZED: %s\n", fractal);
@@ -115,9 +134,83 @@ char* generate_fractal_string(){
 }
 
 
-int main() {
-    char* fractal = generate_fractal_string();
-    printf("%s", fractal);
+// gets the inputs necessary to generate the fractal from the user
+int get_inputs(){
+    char buffer[99];
+    // reading base axioma
+    printf("BASE AXIOMA: ");
+    scanf("%99s", buffer);
+    base_axioma = malloc(sizeof(char)*(strlen(buffer)+1));
+    strcpy(base_axioma, buffer);
+    getchar();
+    // allocating memory for the rules
+    printf("\ninput the number of rules: ");
+    scanf("%d", &rule_number);
+    getchar();
+    rules = malloc(sizeof(char*)*rule_number);
+    substituition_symbols = malloc(sizeof(char)*rule_number);
+    // reading rules 
+    for(int i=0; i<rule_number; i++){
+        printf("input substituition symbol for rule %d: ", i+1);
+        scanf("%c", &substituition_symbols[i]);
+        printf("input rule %d: ", i+1);
+        scanf("%99s", buffer);
+        getchar();
+        rules[i] = malloc(sizeof(char)*(strlen(buffer)+1));
+        strcpy(rules[i], buffer);
+    }
+    // reading removal symbols
+    printf("\ninput the number of symbols to be removed: ");
+    scanf("%d", &removal_symbol_number);
+    getchar();
+    removal_symbols = malloc(sizeof(char)*removal_symbol_number);
+    for(int i=0; i<removal_symbol_number; i++){
+        printf("input removal symbol %d: ", i+1);
+        scanf("%c", &removal_symbols[i]);
+        getchar();
+    }
+    // reading the last inputs: "max_recursion_level"
+    printf("\n\nINPUT THE MAX RECUSION LEVEL: ");
+    scanf("%d", &max_recursion_level);
+    getchar();
+    char confirmation;
+    printf("\nGENERATE FRACTAL (S/N): ");
+    scanf("%c", &confirmation);
+    if(confirmation == 's' || confirmation == 'S') return 1;
+    else return 0;
+
+}
+
+// displays the values of the global variables - debug
+void read_variables(){
+    printf("\nmax recursion level: %d\n", max_recursion_level);
+    printf("base axioma: %s\n", base_axioma);
+    for(int i=0; i<rule_number; i++){
+        printf("rule %d: %c -> %s\n", i+1, substituition_symbols[i], rules[i]);
+    }
+    for(int i=0; i<removal_symbol_number; i++){
+        printf("removal symbol %d: %c\n", i+1, removal_symbols[i]);
+    }
+}
+
+// frees all of the memory used in the code
+void free_all(char* fractal){
     free(fractal);
+    free(base_axioma);
+    for(int i=0; i<rule_number; i++){
+        free(rules[i]);
+    }
+    free(rules);
+    free(substituition_symbols);
+    free(removal_symbols);
+}
+
+
+int main() {
+    char* fractal;
+    get_inputs();
+    fractal = generate_fractal_string();
+    printf("%s", fractal);
+    free_all(fractal);
     return 0;
 }
