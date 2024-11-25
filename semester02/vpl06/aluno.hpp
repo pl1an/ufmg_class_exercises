@@ -7,16 +7,18 @@
 using namespace std;
 
 class aluno{
-    string nome;
-    int matricula;
-    vector<int> notas;
+    public:
 
-    void aluno(string nome, int matricula, vector<int> notas);
+        string nome;
+        int matricula;
+        vector<int> notas;
 
-    int menor_nota();
-    int maior_nota();
-    float calcular_media();
-    void show_self();
-}
+        aluno(string nome, int matricula, vector<int> notas);
+
+        int menor_nota();
+        int maior_nota();
+        float calcular_media();
+        void show_self();
+};
 
 #endif
