@@ -210,7 +210,7 @@ int main() {
     char* fractal;
     get_inputs();
     fractal = generate_fractal_string();
-    printf("%s", fractal);
+    printf("\n\n%s", fractal);
     free_all(fractal);
     return 0;
 }

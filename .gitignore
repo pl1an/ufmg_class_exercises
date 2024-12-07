@@ -5,6 +5,9 @@
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
+# pycharm project settings
+.idea
+
 # Local History for Visual Studio Code
 .history/
 
