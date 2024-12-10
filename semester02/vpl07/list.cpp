@@ -40,30 +40,30 @@ class MainClass{
 
 };
 
-int MainClass::automatic_instance_id = 0;
+int MainClass::automatic_instance_id = 1;
 int MainClass::instance_count = 0;
 
 
 int main(){
-    list<MainClass> main_list;
-    MainClass new_instance;
+    list<MainClass*> main_list;
+    MainClass* new_instance;
     string buffer;
 
     while(true){
         cin >> buffer;
         // following A command
         if(buffer == "A"){
-            new_instance = MainClass();
+            new_instance = new MainClass();
             main_list.push_back(new_instance);
-            cout << new_instance.return_instance_id() << " " << new_instance.return_instance_addres() << endl;
+            cout << new_instance->return_instance_id() << " " << new_instance->return_instance_addres() << endl;
         }
         // following C command
         if(buffer == "C"){
             cin >> buffer;
             if(stoi(buffer)<0){
-                new_instance = MainClass(stoi(buffer));
+                new_instance = new MainClass(stoi(buffer));
                 main_list.push_front(new_instance);
-                cout << new_instance.return_instance_id() << " " << new_instance.return_instance_addres() << endl;
+                cout << new_instance->return_instance_id() << " " << new_instance->return_instance_addres() << endl;
             }
             else{
                 cout << "ERRO" << endl;
@@ -75,7 +75,8 @@ int main(){
                 cout << "ERRO" << endl;
             }
             else{
-                cout << main_list.front().return_instance_id() << " " << main_list.front().return_instance_addres() << endl;
+                cout << main_list.front()->return_instance_id() << " " << main_list.front()->return_instance_addres() << endl;
+                delete main_list.front();
                 main_list.pop_front();
             }
         }
@@ -92,19 +93,22 @@ int main(){
             else{
                 auto it = main_list.begin();
                 advance(it, stoi(buffer)-1);
-                cout << (*it).return_instance_id() << " " << (*it).return_instance_addres() << endl;
+                cout << (*it)->return_instance_id() << " " << (*it)->return_instance_addres() << endl;
             }
         }
         // following L command
         if(buffer == "L"){
             auto it = main_list.begin();
             while(it!=main_list.end()){
-                cout << (*it).return_instance_id() << " " << (*it).return_instance_addres() << endl;
+                cout << (*it)->return_instance_id() << " " << (*it)->return_instance_addres() << endl;
                 it++;
             }
         }
         // following E command (break)
         if(buffer == "E"){
+            for(auto it = main_list.begin(); it!=main_list.end(); it++){
+                delete (*it);
+            }
             main_list.clear();
             break;
         }
