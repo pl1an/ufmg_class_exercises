@@ -14,6 +14,16 @@ typedef struct{
     int remove_symbol;
 } rule;
 
+// returns a new and correctly filled rule
+rule set_up_rule(char substituition_symbol, char* substituition_text, int remove_symbol){
+    rule new_rule;
+    new_rule.substituition_symbol = substituition_symbol;
+    new_rule.substituition_text = substituition_text;
+    new_rule.substituition_text_lenght = strlen(substituition_text)
+    new_rule.remove_symbol = remove_symbol;
+    return new_rule;
+}
+
 
 // inserts "target" string into "origin" at the specified position
 void insert(char* target, char* origin, int position) {
@@ -73,18 +83,30 @@ void generate_fractal_string(char* axioma, rule* rules, int number_of_rules, int
 
 
 int main(){
-    // creating axioma
-    char* axioma = malloc(sizeof(char)*10000);
-    strcpy(axioma, "F+F+F+F");
+    int max_recursion_level;
+    scanf("%d", &max_recursion_level);
+
+    // setting up koch island (Ilha de Koch)
+    char* koch_island_axioma = malloc(sizeof(char)*10000);
+    strcpy(koch_island_axioma, "F+F+F+F");
     // setting up rules
-    rule rules[1];
-    rules[0].remove_symbol = 0;
-    rules[0].substituition_symbol = 'F';
-    rules[0].substituition_text = "F+F-F-FFF+F+F-F";
-    rules[0].substituition_text_lenght = strlen(rules[0].substituition_text);
+    rule koch_island_rules[1];
+    koch_island_rules[0] = set_up_rule('F', "F+F-F-FFF+F+F-F", 0);
     // generating fractal string
-    generate_fractal_string(axioma, rules, 1, 2, "i.txt");
-    printf("%s", axioma);
-    free(axioma);
+    generate_fractal_string(koch_island_axioma, koch_island_rules, 1, max_recursion_level, "i.txt");
+    free(koch_island_axioma);
+
+    // setting up hilberts space-filling curve (Preenchimento de Espaço de Hilbert)
+    char* hilbert_space_axioma = malloc(sizeof(char)*10000);
+    strcpy(hilbert_space_axioma, "X");
+    // setting up rules
+    rule hilbert_space_rules[2];
+    hilbert_space_rules[0] = set_up_rule('X', "-YF+XFX+FY-", 1);
+    hilbert_space_rules[1] = set_up_rule('Y', "+XF-YFY-FX+", 1);
+    // generating fractal string
+    generate_fractal_string(hilbert_space_axioma, hilbert_space_rules, 2, max_recursion_level, "ii.txt");
+    free(hilbert_space_axioma);
+
+    // setting up third fractal (not shure wich one yet)
     return 0;
 }
