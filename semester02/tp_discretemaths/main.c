@@ -19,9 +19,18 @@ rule set_up_rule(char substituition_symbol, char* substituition_text, int remove
     rule new_rule;
     new_rule.substituition_symbol = substituition_symbol;
     new_rule.substituition_text = substituition_text;
-    new_rule.substituition_text_lenght = strlen(substituition_text)
+    new_rule.substituition_text_lenght = strlen(substituition_text);
     new_rule.remove_symbol = remove_symbol;
     return new_rule;
+}
+
+
+int power(int base, int exp){
+    int new_power = 1;
+    for(int i=0; i<exp; i++){
+        new_power *= base;
+    }
+    return new_power;
 }
 
 
@@ -82,12 +91,41 @@ void generate_fractal_string(char* axioma, rule* rules, int number_of_rules, int
 }
 
 
+// returns the expected lenght of koch island in the "n" recursion level
+// (also counts symbols that will be removed at the end, like X´s and Y´s)
+int estimate_koch_island_lenght(int max_recursion_level){
+    int estimated_lenght = 3 + 4*power(9, max_recursion_level);
+    for(int i=1; i<=max_recursion_level; i++){
+        estimated_lenght += 4*6*power(9, i-1);
+    }
+    return estimated_lenght;
+}
+// returns the expected lenght of hilbert space-filling curve in the "n" recursion level
+// (also counts symbols that will be removed at the end, like X´s and Y´s)
+int estimate_hilbert_space_lenght(int max_recursion_level){
+    int estimated_lenght = power(4, max_recursion_level);
+    for(int i=1; i<=max_recursion_level; i++){
+        estimated_lenght += 7*power(4, i-1);
+    }
+    return estimated_lenght;
+}
+// returns the expected lenght of dragon curve in the "n" recursion level
+// (also counts symbols that will be removed at the end, like X´s and Y´s)
+int estimate_dragon_curve_lenght(int max_recursion_level){
+    int estimated_lenght = 1 + power(2, max_recursion_level);
+    for(int i=1; i<=max_recursion_level; i++){
+        estimated_lenght += 3*power(2, i-1);
+    }
+    return estimated_lenght;
+}
+
+
 int main(){
     int max_recursion_level;
     scanf("%d", &max_recursion_level);
 
-    // setting up koch island (Ilha de Koch)
-    char* koch_island_axioma = malloc(sizeof(char)*10000);
+    // setting up koch island (Ilha de Koch) (+1 allocates space to '\0' as well)
+    char* koch_island_axioma = malloc(sizeof(char)*(estimate_koch_island_lenght(max_recursion_level)+1));
     strcpy(koch_island_axioma, "F+F+F+F");
     // setting up rules
     rule koch_island_rules[1];
@@ -96,17 +134,26 @@ int main(){
     generate_fractal_string(koch_island_axioma, koch_island_rules, 1, max_recursion_level, "i.txt");
     free(koch_island_axioma);
 
-    // setting up hilberts space-filling curve (Preenchimento de Espaço de Hilbert)
-    char* hilbert_space_axioma = malloc(sizeof(char)*10000);
+    // setting up hilberts space-filling curve (Preenchimento de Espaço de Hilbert) (+1 allocates space to '\0' as well)
+    char* hilbert_space_axioma = malloc(sizeof(char)*(estimate_hilbert_space_lenght(max_recursion_level)+1)); 
     strcpy(hilbert_space_axioma, "X");
     // setting up rules
     rule hilbert_space_rules[2];
     hilbert_space_rules[0] = set_up_rule('X', "-YF+XFX+FY-", 1);
     hilbert_space_rules[1] = set_up_rule('Y', "+XF-YFY-FX+", 1);
     // generating fractal string
-    generate_fractal_string(hilbert_space_axioma, hilbert_space_rules, 2, max_recursion_level, "ii.txt");
+    generate_fractal_string(hilbert_space_axioma, hilbert_space_rules, 2, max_recursion_level, "ii.txt"); 
     free(hilbert_space_axioma);
 
-    // setting up third fractal (not shure wich one yet)
+    // setting up dragon curve (Curva do Dragão) (+1 allocates space to '\0' as well)
+    char* dragon_curve_axioma = malloc(sizeof(char)*(estimate_dragon_curve_lenght(max_recursion_level)+1)); 
+    strcpy(dragon_curve_axioma, "FX");
+    // setting up rules
+    rule dragon_curve_rules[2];
+    dragon_curve_rules[0] = set_up_rule('X', "X+YF+", 1);
+    dragon_curve_rules[1] = set_up_rule('Y', "-FX-Y", 1);
+    // generating fractal string
+    generate_fractal_string(dragon_curve_axioma, dragon_curve_rules, 2, max_recursion_level, "iii.txt"); 
+    free(dragon_curve_axioma);
     return 0;
 }

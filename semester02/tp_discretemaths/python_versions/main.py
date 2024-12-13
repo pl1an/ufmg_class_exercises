@@ -34,6 +34,6 @@ def generate_fractal_string():
         file.write(base1)
 
 
-generate_fractal_string()
+#generate_fractal_string()
 plotter = FractalPlotter(90)
 plotter.show_plot()
