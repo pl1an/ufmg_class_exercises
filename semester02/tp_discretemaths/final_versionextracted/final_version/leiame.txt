@@ -1,0 +1,25 @@
+## Pré-requisitos
+1. Windows 11 (O programa também pode ser executado em ambientes MacOS e Linux, mas este guia cobre apenas as instruções para execução em um ambiente windows).
+2. Acesso à internet.
+3. Permissões para instalar e executar software, além de modificar arquivos na sua máquina de escolha.
+
+## Instalando o GCC
+1. Baixe o instalador do MinGW ou do MSYS2 que contém o GCC versão 13.2.0 do site de sua preferência.
+    |-> Recomendação: Vá para https://www.msys2.org/ e siga as instruções.
+    |-> Observação: Outras versões do compilador também podem funcionar corretamente, mas o programa foi testado com GCC versão 13.2.0.
+2. Digite "gcc --version" no seu terminal para confirmar a versão instalada.
+
+## Compilando o arquivo principal do projeto (main.c)
+1. Após extrair o arquivo .zip, abra o seu terminal.
+2. Dentro do terminal, navegue até a pasta onde o arquivo .zip foi extraído.
+3. Digite "gcc main.c -o main.exe" para compilar o arquivo main.c em um arquivo main.exe.
+
+## Executando o programa
+1. Execute o arquivo main.exe com o comando "./main.exe".
+2. Digite a entrada esperada (de acordo com as especificações do TP, um inteiro para o nível de recursão dos 3 fractais).
+
+## Finalizando
+1. Pronto! O programa deve ter executado e gerado os fractais.
+2. No diretório onde o arquivo main.exe foi executado devem ter sido criados 3 novos arquivos .txt: "i.txt", "ii.txt", "iii.txt".
+    |-> Cuidado: Caso já existam arquivos "i.txt", "ii.txt" ou "iii.txt" dentro da pasta onde o arquivo main.exe for executado, os arquivos serão sobrescritos. 
+3. Dentro desses arquivos estão os resultados da geração de cada um dos fractais, como especificado nas instruções para o envio do TP.
