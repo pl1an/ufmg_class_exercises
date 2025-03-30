@@ -128,6 +128,14 @@ void printVector(int * vet, int size){
   }
   printf("\n");
 }
+void show_array(int* arr, int size){
+  printf("\n");
+  for(int i=0; i<=size; i++){
+    printf("%d ", arr[i]);
+  }
+  printf("\n");
+  return;
+}
 
 void swap(int *xp, int *yp, sortperf_t *s){
     int temp = *xp;
@@ -169,22 +177,40 @@ void recursiveSelectionSort(int arr[], int l, int r, sortperf_t * s)
 // selection sort
 void selectionSort(int arr[], int l, int r, sortperf_t * s) { 
     inccalls(s,1);
-    int max;
-    for(int i=0; i<=r-1; i++){
-        max = 0;
-        for(int j=1; j<=r-i; j++){
+    int min;
+    for(int i=0; i<=r; i++){
+        min = i;
+        for(int j=i+1; j<=r; j++){
             inccmp(s,1);
-            if(arr[j]>=arr[max]){
-                max=j;
+            if(arr[j]<arr[min]){
+                min=j;
             }
         }
-        if(max!=r-i) swap(&arr[max], &arr[r-i], s);
+        if(min!=i) swap(&arr[min], &arr[i], s);
     }
     return;
 }
 
 //insertion sort
 void insertionSort(int v[], int l, int r, sortperf_t * s) {
+  inccalls(s,1);
+  int aux, j;
+  for(int i=1; i<=r; i++){
+    incmove(s,1);
+    aux = v[i];
+    for(j=i-1; j>=0; j--){
+      inccmp(s, 1);
+      if(aux<v[j]){
+        v[j+1]=v[j];
+        incmove(s, 1);
+      }
+      else{
+        break;
+      }
+    }
+    incmove(s, 1);
+    v[j+1]=aux;
+  }
   return;
 }
 
