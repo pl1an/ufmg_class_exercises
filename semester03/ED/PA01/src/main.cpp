@@ -196,19 +196,17 @@ void insertionSort(int v[], int l, int r, sortperf_t * s) {
   inccalls(s,1);
   int aux, j;
   for(int i=1; i<=r; i++){
+    inccmp(s,1);
     incmove(s,1);
     aux = v[i];
-    for(j=i-1; j>=0; j--){
-      inccmp(s, 1);
-      if(aux<v[j]){
-        v[j+1]=v[j];
-        incmove(s, 1);
-      }
-      else{
-        break;
-      }
+    j=i-1;
+    while(j>=0 && aux<v[j]){
+      inccmp(s,1);
+      incmove(s,1);
+      v[j+1]=v[j];
+      j--;
     }
-    incmove(s, 1);
+    incmove(s,1);
     v[j+1]=aux;
   }
   return;
