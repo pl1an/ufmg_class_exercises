@@ -228,6 +228,30 @@ void partition3(int * A, int l, int r, int *i, int *j, sortperf_t *s) {
 
 // standard quicksort partition
 void partition(int * A, int l, int r, int *i, int *j, sortperf_t *s) {
+  inccalls(s,1);
+  int x, w;
+  *i = l; *j = r;
+  x = A[(*i + *j)/2];
+  do
+  { 
+    inccmp(s,1);
+    while (x > A[*i]){
+      inccmp(s,1);
+      (*i)++;
+    }
+    while (x < A[*j]){
+      inccmp(s,1);
+      (*j)--;
+    }
+    inccmp(s,1);
+    if (*i <= *j){ 
+      incmove(s,3);
+		  w = A[*i]; 
+      A[*i] = A[*j]; 
+      A[*j] = w;
+ 			(*i)++; (*j)--;
+    }
+  } while (*i <= *j);
 }
 
 // standard quicksort
