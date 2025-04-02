@@ -138,10 +138,10 @@ void show_array(int* arr, int size){
 }
 
 void swap(int *xp, int *yp, sortperf_t *s){
-    int temp = *xp;
-    *xp = *yp;
-    *yp = temp;
-    incmove(s,3);
+  int temp = *xp;
+  *xp = *yp;
+  *yp = temp;
+  incmove(s,3);
 }
 
 // shellsort
@@ -193,23 +193,23 @@ void selectionSort(int arr[], int l, int r, sortperf_t * s) {
 
 //insertion sort
 void insertionSort(int v[], int l, int r, sortperf_t * s) {
-  inccalls(s,1);
-  int aux, j;
-  for(int i=1; i<=r; i++){
-    inccmp(s,1);
-    incmove(s,1);
-    aux = v[i];
-    j=i-1;
-    while(j>=0 && aux<v[j]){
+    inccalls(s,1);
+    int aux, j;
+    for(int i=1; i<=r; i++){
       inccmp(s,1);
       incmove(s,1);
-      v[j+1]=v[j];
-      j--;
+      aux = v[i];
+      j=i-1;
+      while(j>=0 && aux<v[j]){
+        inccmp(s,1);
+        incmove(s,1);
+        v[j+1]=v[j];
+        j--;
+      }
+      incmove(s,1);
+      v[j+1]=aux;
     }
-    incmove(s,1);
-    v[j+1]=aux;
-  }
-  return;
+    return;
 }
 
 // median of 3 integers
@@ -224,42 +224,79 @@ int median (int a, int b, int c) {
 
 // quicksort partition using median of 3
 void partition3(int * A, int l, int r, int *i, int *j, sortperf_t *s) {
+    inccalls(s,1);
+    *i = l;
+    *j = r;
+    //choosing median pivot
+    inccmp(s,2);
+    int x;
+    int middle = A[(*i + *j)/2];
+    int left = A[l];
+    int right = A[r];
+    if((middle>left && middle<right) || (middle<left && middle>right)) x = middle;
+    else if((left>middle && left<right) || (left<middle && left>right)) x = left;
+    else x = right;
+    //main sorting loop
+    do{
+        while(x>A[*i]){
+          inccmp(s,1);
+          (*i)++;
+        }
+        while(x<A[*j]){
+          inccmp(s,1);
+          (*j)--;
+        }
+        inccmp(s,1);
+        if(*i<=*j){
+          swap(&A[*i], &A[*j], s);
+          (*i)++;
+          (*j)--;
+        }
+        inccmp(s,1);
+    }while(*i<=*j);
 }
 
 // standard quicksort partition
 void partition(int * A, int l, int r, int *i, int *j, sortperf_t *s) {
-  inccalls(s,1);
-  int x, w;
-  *i = l; *j = r;
-  x = A[(*i + *j)/2];
-  do
-  { 
-    inccmp(s,1);
-    while (x > A[*i]){
-      inccmp(s,1);
-      (*i)++;
-    }
-    while (x < A[*j]){
-      inccmp(s,1);
-      (*j)--;
-    }
-    inccmp(s,1);
-    if (*i <= *j){ 
-      incmove(s,3);
-		  w = A[*i]; 
-      A[*i] = A[*j]; 
-      A[*j] = w;
- 			(*i)++; (*j)--;
-    }
-  } while (*i <= *j);
+    inccalls(s,1);
+    *i = l;
+    *j = r;
+    int x = A[(*i + *j)/2];
+    do{
+        while(x>A[*i]){
+          inccmp(s,1);
+          (*i)++;
+        }
+        while(x<A[*j]){
+          inccmp(s,1);
+          (*j)--;
+        }
+        inccmp(s,1);
+        if(*i<=*j){
+          swap(&A[*i], &A[*j], s);
+          (*i)++;
+          (*j)--;
+        }
+        inccmp(s,1);
+    }while(*i<=*j);
 }
 
 // standard quicksort
 void quickSort(int * A, int l, int r, sortperf_t *s) { 
+    inccalls(s,1);
+    int i, j;
+    partition(A, l, r, &i, &j, s);
+    if(l<j) quickSort(A, l, j, s);
+    if(r>i) quickSort(A, i, r, s);
 }
 
 // quicksort with median of 3
 void quickSort3(int * A, int l, int r, sortperf_t *s) { 
+    inccalls(s,1);
+    int i, j;
+    partition3(A, l, r, &i, &j, s);
+    if(l<j) quickSort(A, l, j, s);
+    if(r>i) quickSort(A, i, r, s);
 }
 
 // quicksort with insertion for small partitions
@@ -415,4 +452,4 @@ int main (int argc, char ** argv){
   printf("%s\n",buf);
 
   exit(0);
-}
+} 
