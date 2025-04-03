@@ -321,6 +321,14 @@ void quickSortIns(int * A, int l, int r, sortperf_t *s) {
 
 // quicksort with insertion for small partitions and median of 3
 void quickSort3Ins(int * A, int l, int r, sortperf_t *s) { 
+    inccalls(s,1);
+    if(l>=r) return;
+    int i, j;
+    partition3(A, l, r, &i, &j, s);
+    if(j-l>50) quickSort3Ins(A, l, j, s);
+    else if(j>l) insertionSort(A, l, j, s);
+    if(r-i>50) quickSort3Ins(A, i, r, s);
+    else if(r>i) insertionSort(A, i, r, s);
 }
 
 void uso()
